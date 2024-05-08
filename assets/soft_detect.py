@@ -5,6 +5,7 @@ import time
 import multiprocessing as mp
 import numpy as np
 import threading
+import os
 import onnxruntime as ort
 # coordinates system
 #  ------------------------------>  [ x: range=-1.0~1.0; w: range=0~W ]
@@ -19,34 +20,50 @@ import onnxruntime as ort
 #  | |---------------------------|
 #  v
 # [ y: range=-1.0~1.0; h: range=0~H ]
-lock = threading.Lock()
-def max_pool(x,nms_radius,res,number):
-        computed = torch.nn.functional.max_pool2d(x, kernel_size=nms_radius * 2 + 1, stride=1, padding=nms_radius)
-        lock.acquire()
-        try:
-            res.append((number,computed))
-        finally:
-            lock.release()
-def max_pool_parallel(x,nms_radius):
-    res = []
-    threads = []
-    for i in range(0, x[0][0].size()[0],x[0][0].size()[0]//2):
-        thread = threading.Thread(target=max_pool, args=(x[:,:,i:i+x[0][0].size()[0]//2,:],nms_radius,res,i))
-        thread.start()
-        threads.append(thread)
-    for thread in threads:
-        thread.join()
-    res = sorted(res, key=lambda x: x[0])
-    joined = torch.cat((res[0][1], res[1][1]), dim=2)
-    return joined
+# lock = threading.Lock()
+# def max_pool(x,nms_radius,res,number):
+#         computed = torch.nn.functional.max_pool2d(x, kernel_size=nms_radius * 2 + 1, stride=1, padding=nms_radius)
+#         lock.acquire()
+#         try:
+#             res.append((number,computed))
+#         finally:
+#             lock.release()
+# def max_pool_parallel(x,nms_radius):
+#     res = []
+#     threads = []
+#     for i in range(0, x[0][0].size()[0],x[0][0].size()[0]//2):
+#         thread = threading.Thread(target=max_pool, args=(x[:,:,i:i+x[0][0].size()[0]//2,:],nms_radius,res,i))
+#         thread.start()
+#         threads.append(thread)
+#     for thread in threads:
+#         thread.join()
+#     res = sorted(res, key=lambda x: x[0])
+#     joined = torch.cat((res[0][1], res[1][1]), dim=2)
+#     return joined
 
+def get_inference_options_max_pool(self):
+        return {
+            "tidl_tools_path": os.environ.get("TIDL_TOOLS_PATH", "/home/workdir/tidl_tools"),
+            "artifacts_folder": "assets/artifacts_max_pool",
+            "debug_level": 0,
+        }
+
+
+inference_tidl_session = ort.InferenceSession(
+            "assets/max_pool_model_3_3.onnx",
+            providers=["TIDLExecutionProvider"],
+            provider_options=[get_inference_options_max_pool],
+            sess_options=ort.SessionOptions())
+
+    
 def simple_nms(scores, nms_radius: int):
     """ Fast Non-maximum suppression to remove nearby points """
     assert (nms_radius >= 0)
+    
     ort_session = ort.InferenceSession("max_pool_model.onnx")
     def max_pool(x):
         ort_inputs = {'input': x.numpy()}
-        ort_outputs = ort_session.run(None, ort_inputs)
+        ort_outputs = inference_tidl_session.run(None, ort_inputs)
         output_tensor = torch.tensor(ort_outputs[0])
         return output_tensor
     zeros = torch.zeros_like(scores)

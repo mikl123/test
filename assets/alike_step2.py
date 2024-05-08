@@ -44,6 +44,12 @@ class ALike(ALNet):
                        scores_th=self.scores_th, n_limit=self.n_limit)
         self.device = device
         self.time_all = 0
+
+
+        self.time_dkd = 0
+        self.time_normalize = 0
+        self.time_convertion = 0
+
         if model_path != '':
             state_dict = torch.load(model_path, self.device)
             self.load_state_dict(state_dict)
@@ -100,18 +106,31 @@ class ALike(ALNet):
         H = 480
         W = 640
 
-        time_start = time.time()
+        # time_start = time.time()
+
+
+        time_begin = time.time()
         descriptor_map =torch.tensor(descriptor_map)
         scores_map =torch.tensor(scores_map)
+        self.time_convertion += time.time() - time_begin 
 
+
+        time_begin_normalize = time.time()
         descriptor_map = torch.nn.functional.normalize(descriptor_map, p=2, dim=1)
-        
+        self.time_normalize += time.time() - time_begin_normalize
+
+
         sort=False
         sub_pixel=False
-        self.time_all += time.time() - time_start
+        # self.time_all += time.time() - time_start
         # time_start = time.time()
+
+        time_begin_dkd = time.time()
         keypoints, descriptors, scores, _ = self.dkd(scores_map, descriptor_map,
                                                          sub_pixel=sub_pixel)
+        
+        self.time_dkd += time.time() - time_begin_dkd
+
         keypoints, descriptors, scores = keypoints[0], descriptors[0], scores[0]
         keypoints = (keypoints + 1) / 2 * keypoints.new_tensor([[W - 1, H - 1]])
 
