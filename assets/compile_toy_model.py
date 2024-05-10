@@ -583,29 +583,29 @@ class SubGraphCompiler:
 
 
 
-    errors = {}
-    for method in methods:
-        output_file = os.path.join(cache_dir, method + '.npy')
-        read_function = generate_read_function(method)
-        if os.path.exists(output_file):
-            errors[method] = np.load(output_file, allow_pickle=True)
-        else:
-            extract_method(method)
-            errors[method] = benchmark_features(read_function)
-            np.save(output_file, errors[method])
-
-    for name, method in zip(names, methods):
-        i_err, v_err, i_err_hom, v_err_hom, _ = errors[method]
-
-        print(f"====={name}=====")
-        print(f"MMA@1 MMA@2 MMA@3 MHA@1 MHA@2 MHA@3: ", end='')
-        for thr in range(1, 4):
-            err = (i_err[thr] + v_err[thr]) / ((n_i + n_v) * 5)
-            print(f"{err * 100:.2f}%", end=' ')
-        for thr in range(1, 4):
-            err_hom = (i_err_hom[thr] + v_err_hom[thr]) / ((n_i + n_v) * 5)
-            print(f"{err_hom * 100:.2f}%", end=' ')
-        print('')
+        errors = {}
+        for method in methods:
+            output_file = os.path.join(cache_dir, method + '.npy')
+            read_function = generate_read_function(method)
+            if os.path.exists(output_file):
+                errors[method] = np.load(output_file, allow_pickle=True)
+            else:
+                extract_method(method)
+                errors[method] = benchmark_features(read_function)
+                np.save(output_file, errors[method])
+    
+        for name, method in zip(names, methods):
+            i_err, v_err, i_err_hom, v_err_hom, _ = errors[method]
+    
+            print(f"====={name}=====")
+            print(f"MMA@1 MMA@2 MMA@3 MHA@1 MHA@2 MHA@3: ", end='')
+            for thr in range(1, 4):
+                err = (i_err[thr] + v_err[thr]) / ((n_i + n_v) * 5)
+                print(f"{err * 100:.2f}%", end=' ')
+            for thr in range(1, 4):
+                err_hom = (i_err_hom[thr] + v_err_hom[thr]) / ((n_i + n_v) * 5)
+                print(f"{err_hom * 100:.2f}%", end=' ')
+            print('')
 
 
 if __name__ == "__main__":
