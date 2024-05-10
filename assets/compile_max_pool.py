@@ -49,7 +49,7 @@ class SubGraphCompiler:
             "tensor_bits": 8,
             "advanced_options:calibration_frames": self.calibration_frames,
             "advanced_options:calibration_iterations": self.calibration_iterations,
-            "advanced_options:add_data_convert_ops": 1,
+            "advanced_options:add_data_convert_ops": 0,
             "debugTraceLevel": 0,
         }
 
@@ -68,7 +68,7 @@ class SubGraphCompiler:
         ]
 
     def get_calibration_tensors(self):
-        calibration_dataset_path = "assets/calibration_120823_max_pool"
+        calibration_dataset_path = "/home/workdir/assets/calibration_120823_max_pool"
         data = pd.read_csv(os.path.join(calibration_dataset_path, "data.csv"))
         data["image_path"] = (
             f"{calibration_dataset_path}/"
