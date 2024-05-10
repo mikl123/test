@@ -14,7 +14,7 @@ from tqdm import tqdm
 import torch
 import numpy as np
 from pathlib import Path
-
+import torch.utils.data as data
 
 def generate_read_function(method, extension='ppm'):
     def read_function(seq_name, im_idx):
