@@ -1,3 +1,0 @@
-2
-0 /MaxPool MaxPool outputAdjNodes 1 1 inputAdjNodes 0 input diagInfo 
-1 /MaxPool_1 MaxPool outputAdjNodes 0 output inputAdjNodes 1 0 diagInfo 

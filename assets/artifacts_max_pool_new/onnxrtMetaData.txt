@@ -1,7 +1,0 @@
-numGraphNodes=2
-0:subGraphName=output
-0:numInputs=1
-0:numOutputs=1
-0:inputIdx=0
-0:inDataNames=input
-0:outDataNames=output
