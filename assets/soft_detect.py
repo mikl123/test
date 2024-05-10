@@ -41,7 +41,7 @@ import onnxruntime as ort
 #     joined = torch.cat((res[0][1], res[1][1]), dim=2)
 #     return joined
 
-def get_inference_options_max_pool(self):
+def get_inference_options_max_pool():
         return {
             "tidl_tools_path": os.environ.get("TIDL_TOOLS_PATH", "/home/workdir/tidl_tools"),
             "artifacts_folder": "assets/artifacts_max_pool",
