@@ -52,7 +52,7 @@ def get_inference_options_max_pool(self):
 inference_tidl_session = ort.InferenceSession(
             "assets/max_pool_model_3_3.onnx",
             providers=["TIDLExecutionProvider"],
-            provider_options=[get_inference_options_max_pool],
+            provider_options=[get_inference_options_max_pool()],
             sess_options=ort.SessionOptions())
 
     
