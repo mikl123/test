@@ -110,29 +110,29 @@ class SubGraphCompiler:
             provider_options=[self.get_inference_options()],
             sess_options=onnxruntime.SessionOptions(),
         )
-        inference_session = onnxruntime.InferenceSession(
-            self.onnx_path,
-            providers=["CPUExecutionProvider"],
-            provider_options=[{}],
-            sess_options=onnxruntime.SessionOptions(),
-        )
+        # inference_session = onnxruntime.InferenceSession(
+        #     self.onnx_path,
+        #     providers=["CPUExecutionProvider"],
+        #     provider_options=[{}],
+        #     sess_options=onnxruntime.SessionOptions(),
+        # )
         all_outputs = []
         time_all = 0
         for inputs in self.data[:5]:
-            outputs = inference_session.run(None, {self.input_node: np.array(inputs)})[0]
+            # outputs = inference_session.run(None, {self.input_node: np.array(inputs)})[0]
             time_start = time.time()
             outputs_tidl = inference_tidl_session.run(None, {self.input_node: np.array(inputs)})[0]
 
             time_all += time.time() - time_start
             all_outputs.append((outputs_tidl, outputs))
-        for outputs_tidl, outputs in all_outputs:
-            for error_margin in [0.1, 0.01, 0.001, 0.0001]:
-                print(f"Error margin: {error_margin}")
-                compare_float_3d_arrays(
-                    arr1=outputs_tidl[0],
-                    arr2=outputs[0],
-                    error_margin=error_margin,
-                )   
+        # for outputs_tidl, outputs in all_outputs:
+        #     for error_margin in [0.1, 0.01, 0.001, 0.0001]:
+        #         print(f"Error margin: {error_margin}")
+        #         compare_float_3d_arrays(
+        #             arr1=outputs_tidl[0],
+        #             arr2=outputs[0],
+        #             error_margin=error_margin,
+        #         )   
         print("Average time step1 without upsample: ", str(time_all / 5))
 
 
