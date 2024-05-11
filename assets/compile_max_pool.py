@@ -124,7 +124,7 @@ class SubGraphCompiler:
             outputs_tidl = inference_tidl_session.run(None, {self.input_node: np.array(inputs)})[0]
 
             time_all += time.time() - time_start
-            all_outputs.append((outputs_tidl, outputs))
+            # all_outputs.append((outputs_tidl, outputs))
         # for outputs_tidl, outputs in all_outputs:
         #     for error_margin in [0.1, 0.01, 0.001, 0.0001]:
         #         print(f"Error margin: {error_margin}")

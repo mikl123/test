@@ -446,7 +446,7 @@ class SubGraphCompiler:
             "advanced_options:calibration_frames": self.calibration_frames,
             "advanced_options:calibration_iterations": self.calibration_iterations,
             "advanced_options:add_data_convert_ops": 1,
-            "debugTraceLevel": 0,
+            "debugTraceLevel": 2,
         }
 
     def get_inference_options(self):
