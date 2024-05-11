@@ -119,9 +119,9 @@ class SubGraphCompiler:
         all_outputs = []
         time_all = 0
         for inputs in self.data[:5]:
-            outputs = inference_session.run(None, {self.input_node: inputs})[0]
+            outputs = inference_session.run(None, {self.input_node: np.array(inputs)})[0]
             time_start = time.time()
-            outputs_tidl = inference_tidl_session.run(None, {self.input_node: inputs})[0]
+            outputs_tidl = inference_tidl_session.run(None, {self.input_node: np.array(inputs)})[0]
 
             time_all += time.time() - time_start
             all_outputs.append((outputs_tidl, outputs))
