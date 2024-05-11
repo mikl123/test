@@ -485,7 +485,9 @@ class SubGraphCompiler:
 
 
     def predict(self, step_1, step_2, data):
-
+        global time_total
+        global time_step1
+        global time_step2 
         start_total = time.time()
         output = step_1.run(None, {self.input_node: data.astype(np.float32)})
         time_step1 += time.time() - start_total
@@ -515,6 +517,9 @@ class SubGraphCompiler:
 
     
     def inference(self):
+        global time_total
+        global time_step1
+        global time_step2 
         args = {"model":"alike-t",
         "input":r".\assets\tum",
         "device":"cpu",
