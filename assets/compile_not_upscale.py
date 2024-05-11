@@ -34,8 +34,8 @@ class SubGraphCompiler:
         self.artifacts_folder = artifacts_folder
 
         self.input_node = "img"
-        self.input_shape = (1, 3, 256, 256)
-        self.output_shape = (1, 112, 16, 16)
+        self.input_shape = (1 ,480, 640, 3)
+        self.output_shape = (1, 1, 65, 480, 640)
         self.calibration_frames = 5
         self.calibration_iterations = 5
         self.data = self.get_calibration_tensors()

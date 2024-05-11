@@ -1,0 +1,5 @@
+0 0 input 
+1 1 input_netFormat 
+2 2 /MaxPool_output_0 
+3 3 output 
+4 0 input 
