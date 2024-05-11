@@ -453,7 +453,7 @@ class SubGraphCompiler:
         return {
             "tidl_tools_path": os.environ.get("TIDL_TOOLS_PATH", "/home/workdir/tidl_tools"),
             "artifacts_folder": self.artifacts_folder,
-            "debug_level": 0,
+            "debug_level": 7,
         }
 
     def generate_fixed_seed_arrays(self, seed=47):
@@ -491,12 +491,12 @@ class SubGraphCompiler:
         time_step1 += time.time() - start_total
 
         start_step2 = time.time()
-        res = step_2(output[0],output[1])
+        # res = step_2(output[0],output[1])
         time_step2 += time.time() - start_step2
         
         time_total += time.time() - start_total
 
-        return res
+        return []
     def compile(self):
         if os.path.exists(self.artifacts_folder):
             shutil.rmtree(self.artifacts_folder)
@@ -536,8 +536,8 @@ class SubGraphCompiler:
         )
         for inputs in self.data[:5]:
             pred = self.predict(inference_tidl_session, model, inputs)
-            kpts = pred["keypoints"]
-            desc = pred["descriptors"]
+            # kpts = pred["keypoints"]
+            # desc = pred["descriptors"]
 
 
             # out, N_matches = tracker.update(inputs, kpts, desc)
